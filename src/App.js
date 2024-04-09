@@ -1,8 +1,11 @@
-import "./App.css";
+import React from "react";
+import Body from "./components/Body.js";
 
 function App() {
   return (
-    <div className="text-3xl font-bold text-green-800 ">Hello Everyone.</div>
+    <div>
+      <Body />
+    </div>
   );
 }
 
