@@ -2,23 +2,70 @@ import React, { useRef, useState } from "react";
 import Header from "./Header";
 import Background_Image from "../assets/bg_image.png";
 import { checkValidData } from "../utils/validate";
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
+import { auth } from "../utils/firebase";
+import { useNavigate } from "react-router-dom";
+
 const Login = () => {
   const [isSignInForm, setIsSignInForm] = useState(true);
   const [errorMessage, setErrorMessage] = useState(null);
+  const navigate = useNavigate();
 
   const email = useRef(null);
   const password = useRef(null);
 
   const handleButtonClick = () => {
-    checkValidData(email, password);
-
     console.log(email.current.value, password.current.value);
     const msg = checkValidData(email.current.value, password.current.value);
     setErrorMessage(msg);
+
+    if (msg) return;
+
+    if (!isSignInForm) {
+      //SignUp Logic
+      createUserWithEmailAndPassword(
+        auth,
+        email.current.value,
+        password.current.value
+      )
+        .then((userCredential) => {
+          const user = userCredential.user;
+          console.log(user);
+          navigate("/browse");
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          setErrorMessage("Already you are an user!");
+        });
+    } else {
+      //Sign-In Logic
+      signInWithEmailAndPassword(
+        auth,
+        email.current.value,
+        password.current.value
+      )
+        .then((userCredential) => {
+          const user = userCredential.user;
+          console.log(user);
+          navigate("/browse");
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          // eslint-disable-next-line no-unused-vars
+          const errorMessage = error.message;
+          setErrorMessage(errorCode + ": User Not Found");
+        });
+    }
   };
+
   const toggleSignInForm = () => {
     setIsSignInForm(!isSignInForm);
   };
+
   return (
     <div>
       <Header />
@@ -34,10 +81,10 @@ const Login = () => {
             className="font-bold text-3xl py-7 left-1 top-0"
             style={{ marginLeft: "5px", marginTop: "-60px" }}
           >
-            {isSignInForm ? "Sign Up" : "Sign In"}
+            {isSignInForm ? "Sign In" : "Sign Up"}
           </h1>
           <div className="flex flex-col">
-            {isSignInForm && (
+            {!isSignInForm && (
               <input
                 type="text"
                 placeholder="Enter Full Name "
@@ -63,27 +110,27 @@ const Login = () => {
             onClick={handleButtonClick}
             style={{ animation: "pulse 2s infinite" }}
           >
-            {isSignInForm ? "Sign Up" : "Sign In"}
+            {isSignInForm ? "Sign In" : "Sign Up"}
           </button>
           <p className="py-2 ">
             {isSignInForm ? (
               <>
-                Already an user?{" "}
-                <span
-                  className="underline underline-offset-4 text-blue-800 cursor-pointer"
-                  onClick={toggleSignInForm}
-                >
-                  Sign In Now
-                </span>
-              </>
-            ) : (
-              <>
-                Already Registered{" "}
+                New to Netflix?{" "}
                 <span
                   className="underline underline-offset-4 text-blue-800 cursor-pointer"
                   onClick={toggleSignInForm}
                 >
                   Sign Up Now
+                </span>
+              </>
+            ) : (
+              <>
+                Already Registered?{" "}
+                <span
+                  className="underline underline-offset-4 text-blue-800 cursor-pointer"
+                  onClick={toggleSignInForm}
+                >
+                  Sign In Now
                 </span>
               </>
             )}
