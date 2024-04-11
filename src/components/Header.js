@@ -1,14 +1,73 @@
 import React from "react";
+import { useEffect } from "react";
 import Logo from "../assets/Vector__3_.svg";
+import { useNavigate } from "react-router-dom";
+import { auth } from "../utils/firebase";
+import { signOut } from "firebase/auth";
+import { useSelector } from "react-redux";
+import { onAuthStateChanged } from "firebase/auth";
+import { addUser, removeUser } from "../utils/userSlice";
+import { useDispatch } from "react-redux";
+
 const Header = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const user = useSelector((store) => store.user);
+  const handleSignOut = () => {
+    signOut(auth)
+      .then(() => {})
+      .catch((error) => {
+        navigate("/error");
+      });
+  };
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        const { uid, email, displayname, photoURL } = user;
+        dispatch(
+          addUser({
+            uid: uid,
+            email: email,
+            displayname: displayname,
+            photoURL: photoURL,
+          })
+        );
+        navigate("/browse");
+      } else {
+        dispatch(removeUser());
+        navigate("/");
+      }
+    });
+    // Unsubscribed when component is unmount
+    return () => unsubscribe();
+  }, []);
   return (
-    <div className=" w-full absolute px-8 py-2 bg-gradient-to-b from-black z-10">
+    <div className=" bg-transparent w-screen justify-between flex absolute px-8 py-2 bg-gradient-to-b from-black z-10">
       <img
         className="w-44"
         src={Logo}
         alt="logo"
         style={{ height: "40px", width: "auto", marginLeft: "-10px" }}
       />
+      {user && (
+        <div className="cursor-pointer flex justify-between items-center space-x-4 ">
+          <img
+            className="h-9 w-9 mr-13 rounded-lg "
+            src={user?.photoURL}
+            alt="user_icon"
+            style={{ marginLeft: "-20px" }}
+          />
+          <div className="flex items-center justify-end">
+            <button
+              className="mr-2 flex items-center justify-center px-4 py-2 border border-transparent text-base font-medium rounded-md text-white bg-red-600 hover:bg-red-700"
+              type="button"
+              onClick={handleSignOut}
+            >
+              Sign Out
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
