@@ -20,7 +20,6 @@ const useMovieTrailer = (movieID) => {
       }
 
       const json = await data.json();
-      console.log("API response:", json);
 
       if (
         !json.results ||
@@ -38,7 +37,6 @@ const useMovieTrailer = (movieID) => {
         (video) => video.type === "Trailer"
       );
       const trailer = filterData.length === 0 ? json.results[0] : filterData[0];
-      console.log("Trailer:", trailer);
       dispatch(addTrailerVideo(trailer));
     } catch (error) {
       console.error("Error fetching movie videos:", error);

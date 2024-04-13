@@ -24,7 +24,6 @@ const Login = () => {
   const password = useRef(null);
 
   const handleButtonClick = () => {
-    console.log(email.current.value, password.current.value);
     const msg = checkValidData(email.current.value, password.current.value);
     setErrorMessage(msg);
 
@@ -58,7 +57,6 @@ const Login = () => {
             .catch((error) => {
               setErrorMessage(error.message);
             });
-          console.log(user);
           navigate("/browse");
         })
         .catch((error) => {
@@ -75,7 +73,6 @@ const Login = () => {
       )
         .then((userCredential) => {
           const user = userCredential.user;
-          console.log(user);
           navigate("/browse");
         })
         .catch((error) => {
