@@ -11,6 +11,8 @@ import { useDispatch } from "react-redux";
 import { toggleGptSearchView } from "../utils/gptSlice";
 import { SUPPORTED_LANGUAGES } from "../utils/constant";
 import { changeLanguage } from "../utils/configSlice";
+import user_icon from "../assets/user_icon.png";
+import "./Header.css";
 
 const Header = () => {
   const navigate = useNavigate();
@@ -79,7 +81,7 @@ const Header = () => {
           </button>
           <img
             className="h-9 w-9 mr-13 rounded-lg  px-4 py-2 "
-            src={user?.photoURL}
+            src={user_icon}
             alt="user_icon"
             style={{ marginLeft: "-20px" }}
           />

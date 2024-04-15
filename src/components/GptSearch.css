@@ -1,0 +1,20 @@
+@media (max-width: 768px) {
+  .bg-transparent.fixed.bottom-0.-left-10 {
+    left: 0;
+    width: 100%;
+    padding: 10px;
+  }
+
+  .max-w-screen-lg.mx-auto.flex {
+    flex-direction: column;
+  }
+
+  .text-white.border-2.border-white.flex-grow.bg-transparent.rounded-l-md.p-4 {
+    width: calc(100% - 90px); /* Adjust width as needed */
+    margin-bottom: 10px;
+  }
+
+  .ml-1.bg-blue-500.text-white.font-bold.py-2.px-4.rounded-r-md {
+    width: 80px; /* Adjust width as needed */
+  }
+}

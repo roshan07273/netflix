@@ -1,0 +1,36 @@
+/* header.css */
+
+@media (max-width: 768px) {
+  .bg-gradient-to-b {
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+  }
+
+  .w-44 {
+    width: 100%;
+    max-width: 200px; /* Adjust width as needed */
+    margin-bottom: 20px;
+  }
+
+  .flex.items-center.justify-between.space-x-4 {
+    flex-direction: column;
+  }
+
+  .mx-4 {
+    margin: 10px;
+  }
+
+  .mr-13 {
+    margin-right: 0;
+  }
+
+  .justify-end {
+    justify-content: center;
+  }
+
+  .flex.items-center.justify-end {
+    flex-direction: column;
+    margin-top: 20px;
+  }
+}
